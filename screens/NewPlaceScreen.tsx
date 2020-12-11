@@ -9,18 +9,27 @@ import {
 } from "react-native";
 import {
 	NavigationStackOptions,
+	NavigationStackProp,
 	NavigationStackScreenProps,
 } from "react-navigation-stack";
+import { useDispatch } from "react-redux";
 import { Colors } from "../assets/Colors";
+import * as placesActions from "../store/places-actions";
 
-interface Props {}
+interface Props {
+	navigation: NavigationStackProp<{}>;
+}
 
 const NewPlaceScreen = (props: Props) => {
 	const [titleValue, setTitleValue] = useState("");
+	const dispatch = useDispatch();
 	const titleChangeHandler = (text: string) => {
 		setTitleValue(text);
 	};
-	const savePlaceHandler = () => {};
+	const savePlaceHandler = () => {
+		dispatch(placesActions.addPlace(titleValue));
+		props.navigation.goBack();
+	};
 	return (
 		<ScrollView>
 			<View style={styles.form}>
