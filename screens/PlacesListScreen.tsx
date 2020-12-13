@@ -1,21 +1,34 @@
 import React from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { FlatList, Platform, StyleSheet, Text, View } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import {
 	NavigationStackProp,
 	NavigationStackScreenComponent,
 } from "react-navigation-stack";
+import { useSelector } from "react-redux";
+import { RootState } from "../App";
 import CustomHeaderButton from "../components/CustomHeaderButton";
+import PlaceItem from "../components/PlaceItem";
 
 interface Props {
 	navigation: NavigationStackProp;
 }
 
 const PlacesListScreen: NavigationStackScreenComponent = (props: Props) => {
+	const places = useSelector((state: RootState) => state.places.places);
 	return (
-		<View>
-			<Text>PlacesListScreen</Text>
-		</View>
+		<FlatList
+			data={places}
+			keyExtractor={(item) => item.id}
+			renderItem={(itemData) => (
+				<PlaceItem
+					image={""}
+					title={itemData.item.title}
+					address={""}
+					onSelect={() => {}}
+				></PlaceItem>
+			)}
+		></FlatList>
 	);
 };
 
