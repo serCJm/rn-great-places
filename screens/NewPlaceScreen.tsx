@@ -22,13 +22,17 @@ interface Props {
 
 const NewPlaceScreen: NavigationStackScreenComponent = (props: Props) => {
 	const [titleValue, setTitleValue] = useState("");
+	const [selectedImage, setSelectedImage] = useState("");
 	const dispatch = useDispatch();
 	const titleChangeHandler = (text: string) => {
 		setTitleValue(text);
 	};
 	const savePlaceHandler = () => {
-		dispatch(placesActions.addPlace(titleValue));
+		dispatch(placesActions.addPlace(titleValue, selectedImage));
 		props.navigation.goBack();
+	};
+	const imageTakenHandler = (imagePath: string) => {
+		setSelectedImage(imagePath);
 	};
 	return (
 		<ScrollView>
@@ -39,7 +43,9 @@ const NewPlaceScreen: NavigationStackScreenComponent = (props: Props) => {
 					onChangeText={titleChangeHandler}
 					value={titleValue}
 				></TextInput>
-				<ImagePickerComponent></ImagePickerComponent>
+				<ImagePickerComponent
+					onImageTake={imageTakenHandler}
+				></ImagePickerComponent>
 				<Button
 					title="Save Place"
 					color={Colors.PRIMARY}

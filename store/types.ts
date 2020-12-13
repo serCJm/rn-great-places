@@ -10,6 +10,7 @@ interface AddPlaceAction {
 	type: typeof ADD_PLACE;
 	placeData: {
 		title: string;
+		image: string;
 	};
 }
 

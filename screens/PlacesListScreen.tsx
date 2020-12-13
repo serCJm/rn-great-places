@@ -22,7 +22,7 @@ const PlacesListScreen: NavigationStackScreenComponent = (props: Props) => {
 			keyExtractor={(item) => item.id}
 			renderItem={(itemData) => (
 				<PlaceItem
-					image={""}
+					image={itemData.item.imageUri}
 					title={itemData.item.title}
 					address={""}
 					onSelect={() => {
