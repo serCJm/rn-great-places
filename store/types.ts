@@ -9,6 +9,7 @@ export interface IPlacesState {
 interface AddPlaceAction {
 	type: typeof ADD_PLACE;
 	placeData: {
+		id: string;
 		title: string;
 		image: string;
 	};
