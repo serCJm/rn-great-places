@@ -8,19 +8,19 @@ import {
 	Button,
 } from "react-native";
 import {
-	NavigationStackOptions,
 	NavigationStackProp,
-	NavigationStackScreenProps,
+	NavigationStackScreenComponent,
 } from "react-navigation-stack";
 import { useDispatch } from "react-redux";
 import { Colors } from "../assets/Colors";
+import ImagePickerComponent from "../components/ImagePicker";
 import * as placesActions from "../store/places-actions";
 
 interface Props {
-	navigation: NavigationStackProp<{}>;
+	navigation: NavigationStackProp;
 }
 
-const NewPlaceScreen = (props: Props) => {
+const NewPlaceScreen: NavigationStackScreenComponent = (props: Props) => {
 	const [titleValue, setTitleValue] = useState("");
 	const dispatch = useDispatch();
 	const titleChangeHandler = (text: string) => {
@@ -39,6 +39,7 @@ const NewPlaceScreen = (props: Props) => {
 					onChangeText={titleChangeHandler}
 					value={titleValue}
 				></TextInput>
+				<ImagePickerComponent></ImagePickerComponent>
 				<Button
 					title="Save Place"
 					color={Colors.PRIMARY}
@@ -49,9 +50,7 @@ const NewPlaceScreen = (props: Props) => {
 	);
 };
 
-NewPlaceScreen.navigationOptions = (
-	navData: NavigationStackScreenProps
-): NavigationStackOptions => {
+NewPlaceScreen.navigationOptions = (navData) => {
 	return {
 		headerTitle: "Add New Place",
 	};
