@@ -25,7 +25,12 @@ const PlacesListScreen: NavigationStackScreenComponent = (props: Props) => {
 					image={""}
 					title={itemData.item.title}
 					address={""}
-					onSelect={() => {}}
+					onSelect={() => {
+						props.navigation.navigate("PlaceDetail", {
+							placeTitle: itemData.item.title,
+							placeId: itemData.item.id,
+						});
+					}}
 				></PlaceItem>
 			)}
 		></FlatList>
