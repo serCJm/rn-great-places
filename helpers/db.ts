@@ -45,3 +45,23 @@ export const insertPlace = (
 	});
 	return promise;
 };
+
+export const fetchPlaces = () => {
+	const promise = new Promise((res, rej) => {
+		db.transaction((tx) => {
+			tx.executeSql(
+				"SELECT * FROM places;",
+				[],
+				(_, result) => {
+					res(result);
+				},
+				(_, err) => {
+					console.log("Fetch places error");
+					rej(err);
+					return false;
+				}
+			);
+		});
+	});
+	return promise;
+};

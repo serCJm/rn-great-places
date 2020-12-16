@@ -1,9 +1,10 @@
 import * as FileSystem from "expo-file-system";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../App";
-import { insertPlace } from "../helpers/db";
-import { ADD_PLACE, PlacesActionTypes } from "./types";
+import { insertPlace, fetchPlaces } from "../helpers/db";
+import { ADD_PLACE, PlacesActionTypes, SET_PLACES } from "./types";
 import * as SQLite from "expo-sqlite";
+import Place from "../models/place";
 
 export const addPlace = (
 	title: string,
@@ -21,12 +22,12 @@ export const addPlace = (
 			});
 			const dbResult: SQLite.SQLResultSet = (await insertPlace(
 				title,
-				image,
+				newPath,
 				"address",
 				15.6,
 				17.6
 			)) as SQLite.SQLResultSet;
-			console.log(dbResult);
+
 			dispatch({
 				type: ADD_PLACE,
 				placeData: {
@@ -35,6 +36,31 @@ export const addPlace = (
 					image: newPath,
 				},
 			});
+		} catch (e) {
+			console.log(e);
+			throw e;
+		}
+	};
+};
+
+interface ISQLResultSet extends SQLite.SQLResultSet {
+	rows: {
+		_array: Place[];
+		length: number;
+		item(index: number): any;
+	};
+}
+
+export const getPlaces = (): ThunkAction<
+	void,
+	RootState,
+	unknown,
+	PlacesActionTypes
+> => {
+	return async (dispatch) => {
+		try {
+			const dbResult = (await fetchPlaces()) as ISQLResultSet;
+			dispatch({ type: SET_PLACES, places: dbResult.rows._array });
 		} catch (e) {
 			console.log(e);
 			throw e;

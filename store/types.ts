@@ -2,6 +2,7 @@ import Place from "../models/place";
 
 // PLACES
 export const ADD_PLACE = "ADD_PLACE";
+export const SET_PLACES = "SET_PLACES";
 export interface IPlacesState {
 	places: Place[];
 }
@@ -14,5 +15,9 @@ interface AddPlaceAction {
 		image: string;
 	};
 }
+interface GetPlaceAction {
+	type: typeof SET_PLACES;
+	places: Place[];
+}
 
-export type PlacesActionTypes = AddPlaceAction;
+export type PlacesActionTypes = AddPlaceAction | GetPlaceAction;
