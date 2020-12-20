@@ -10,6 +10,7 @@ import {
 import { Colors } from "../assets/Colors";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
+import MapPreview from "./MapPreview";
 
 interface Props {}
 
@@ -56,7 +57,7 @@ const LocationPicker = (props: Props) => {
 	};
 	return (
 		<View style={styles.locationPicker}>
-			<View style={styles.mapPreview}>
+			<MapPreview style={styles.mapPreview} location={pickedLocation}>
 				{isLoading ? (
 					<ActivityIndicator
 						size="large"
@@ -65,7 +66,7 @@ const LocationPicker = (props: Props) => {
 				) : (
 					<Text>No location chosen yet!</Text>
 				)}
-			</View>
+			</MapPreview>
 			<Button
 				title="Get User Location"
 				color={Colors.PRIMARY}
