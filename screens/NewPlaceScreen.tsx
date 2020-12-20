@@ -47,7 +47,7 @@ const NewPlaceScreen: NavigationStackScreenComponent = (props: Props) => {
 				<ImagePickerComponent
 					onImageTake={imageTakenHandler}
 				></ImagePickerComponent>
-				<LocationPicker></LocationPicker>
+				<LocationPicker navigation={props.navigation}></LocationPicker>
 				<Button
 					title="Save Place"
 					color={Colors.PRIMARY}

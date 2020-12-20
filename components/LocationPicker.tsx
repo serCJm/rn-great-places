@@ -11,8 +11,11 @@ import { Colors } from "../assets/Colors";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import MapPreview from "./MapPreview";
+import { NavigationStackProp } from "react-navigation-stack";
 
-interface Props {}
+interface Props {
+	navigation: NavigationStackProp;
+}
 
 interface IPickedLocation {
 	lat: number;
@@ -55,9 +58,16 @@ const LocationPicker = (props: Props) => {
 		}
 		setIsLoading(false);
 	};
+	const pickOnMapHandler = () => {
+		props.navigation.navigate("Map");
+	};
 	return (
 		<View style={styles.locationPicker}>
-			<MapPreview style={styles.mapPreview} location={pickedLocation}>
+			<MapPreview
+				style={styles.mapPreview}
+				location={pickedLocation}
+				onPress={pickOnMapHandler}
+			>
 				{isLoading ? (
 					<ActivityIndicator
 						size="large"
@@ -67,11 +77,18 @@ const LocationPicker = (props: Props) => {
 					<Text>No location chosen yet!</Text>
 				)}
 			</MapPreview>
-			<Button
-				title="Get User Location"
-				color={Colors.PRIMARY}
-				onPress={getLocationHandler}
-			></Button>
+			<View style={styles.actions}>
+				<Button
+					title="Get User Location"
+					color={Colors.PRIMARY}
+					onPress={getLocationHandler}
+				></Button>
+				<Button
+					title="Pick on Map"
+					color={Colors.PRIMARY}
+					onPress={pickOnMapHandler}
+				></Button>
+			</View>
 		</View>
 	);
 };
@@ -90,5 +107,10 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		justifyContent: "center",
 		alignItems: "center",
+	},
+	actions: {
+		flexDirection: "row",
+		justifyContent: "space-around",
+		width: "100%",
 	},
 });
