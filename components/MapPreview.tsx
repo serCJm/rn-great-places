@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, ViewStyle } from "react-native";
+import {
+	StyleSheet,
+	Text,
+	View,
+	Image,
+	ViewStyle,
+	TouchableOpacity,
+} from "react-native";
 import ENV from "../env";
 
 interface Props {
@@ -10,6 +17,7 @@ interface Props {
 				lng: number;
 		  }
 		| undefined;
+	onPress: () => void;
 	children: React.ReactNode;
 }
 
@@ -23,7 +31,10 @@ const MapPreview = (props: Props) => {
 	&key=${ENV().googleApiKey}`;
 	}
 	return (
-		<View style={{ ...styles.mapPreview, ...props.style }}>
+		<TouchableOpacity
+			onPress={props.onPress}
+			style={{ ...styles.mapPreview, ...props.style }}
+		>
 			{props.location ? (
 				<Image
 					style={styles.mapImage}
@@ -32,7 +43,7 @@ const MapPreview = (props: Props) => {
 			) : (
 				props.children
 			)}
-		</View>
+		</TouchableOpacity>
 	);
 };
 
