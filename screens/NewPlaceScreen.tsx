@@ -32,9 +32,14 @@ const NewPlaceScreen: NavigationStackScreenComponent = (props: Props) => {
 		setTitleValue(text);
 	};
 	const savePlaceHandler = () => {
-		dispatch(
-			placesActions.addPlace(titleValue, selectedImage, selectedLocation)
-		);
+		if (selectedLocation)
+			dispatch(
+				placesActions.addPlace(
+					titleValue,
+					selectedImage,
+					selectedLocation
+				)
+			);
 		props.navigation.goBack();
 	};
 	const imageTakenHandler = (imagePath: string) => {

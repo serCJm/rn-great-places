@@ -6,13 +6,30 @@ import { ADD_PLACE, PlacesActionTypes, SET_PLACES } from "./types";
 import * as SQLite from "expo-sqlite";
 import Place from "../models/place";
 import { IPickedLocation } from "../components/LocationPicker";
+import ENV from "../env";
 
 export const addPlace = (
 	title: string,
 	image: string,
-	location: IPickedLocation | undefined
+	location: IPickedLocation
 ): ThunkAction<void, RootState, unknown, PlacesActionTypes> => {
 	return async (dispatch) => {
+		const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${
+			location?.lat
+		},${location?.lng}&key=${ENV().googleApiKey}
+		`);
+
+		if (!response.ok) {
+			throw new Error("Something Went Wrong");
+		}
+
+		const resData = await response.json();
+		if (!resData) {
+			throw new Error("Something Went Wrong");
+		}
+
+		const address = resData.results[0].formatted_address;
+
 		const fileName = image.split("/").pop() || "";
 		const newPath = FileSystem.documentDirectory
 			? FileSystem.documentDirectory + fileName
@@ -25,9 +42,9 @@ export const addPlace = (
 			const dbResult: SQLite.SQLResultSet = (await insertPlace(
 				title,
 				newPath,
-				"address",
-				15.6,
-				17.6
+				address,
+				location?.lat,
+				location?.lng
 			)) as SQLite.SQLResultSet;
 
 			dispatch({
@@ -36,6 +53,11 @@ export const addPlace = (
 					id: dbResult.insertId.toString(),
 					title,
 					image: newPath,
+					address,
+					coords: {
+						lat: location.lat,
+						lng: location.lng,
+					},
 				},
 			});
 		} catch (e) {

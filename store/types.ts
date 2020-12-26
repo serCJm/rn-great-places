@@ -13,6 +13,11 @@ interface AddPlaceAction {
 		id: string;
 		title: string;
 		image: string;
+		address: string;
+		coords: {
+			lat: number;
+			lng: number;
+		};
 	};
 }
 interface GetPlaceAction {
