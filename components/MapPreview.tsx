@@ -18,7 +18,7 @@ interface Props {
 		  }
 		| undefined;
 	onPress: () => void;
-	children: React.ReactNode;
+	children?: React.ReactNode;
 }
 
 const MapPreview = (props: Props) => {

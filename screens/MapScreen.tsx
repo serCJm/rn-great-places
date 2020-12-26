@@ -18,17 +18,21 @@ interface ISelectedLocation {
 }
 
 const MapScreen: NavigationStackScreenComponent = (props: Props) => {
+	const initialLocation = props.navigation.getParam("initialLocation");
+	const readOnly = props.navigation.getParam("readonly");
+
 	const [
 		selectedLocation,
 		setSelectedLocation,
 	] = useState<ISelectedLocation>();
 	const mapRegion = {
-		latitude: 37.78,
-		longitude: -122.43,
+		latitude: initialLocation ? initialLocation.lat : 37.78,
+		longitude: initialLocation ? initialLocation.lat : -122.43,
 		latitudeDelta: 0.0922,
 		longitudeDelta: 0.0421,
 	};
 	const selectLocationHandler = (event: MapEvent) => {
+		if (readOnly) return;
 		setSelectedLocation({
 			lat: event.nativeEvent.coordinate.latitude,
 			lng: event.nativeEvent.coordinate.longitude,
@@ -78,6 +82,8 @@ const MapScreen: NavigationStackScreenComponent = (props: Props) => {
 
 MapScreen.navigationOptions = (navData) => {
 	const saveFn = navData.navigation.getParam("saveLocation");
+	const readOnly = navData.navigation.getParam("readonly");
+	if (readOnly) return {};
 	return {
 		headerRight: () => (
 			<TouchableOpacity style={styles.headerButton} onPress={saveFn}>
