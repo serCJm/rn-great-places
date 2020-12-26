@@ -15,9 +15,10 @@ import { NavigationStackProp } from "react-navigation-stack";
 
 interface Props {
 	navigation: NavigationStackProp;
+	onLocationPicked: (location: IPickedLocation) => void;
 }
 
-interface IPickedLocation {
+export interface IPickedLocation {
 	lat: number;
 	lng: number;
 }
@@ -28,11 +29,14 @@ const LocationPicker = (props: Props) => {
 
 	const mapPickedLocation = props.navigation.getParam("pickedLocation");
 
+	const { onLocationPicked } = props;
+
 	useEffect(() => {
 		if (mapPickedLocation) {
 			setPickedLocation(mapPickedLocation);
+			onLocationPicked(mapPickedLocation);
 		}
-	}, [mapPickedLocation]);
+	}, [mapPickedLocation, onLocationPicked]);
 
 	const verifyPermissions = async () => {
 		const result = await Permissions.askAsync(Permissions.LOCATION);
@@ -55,6 +59,10 @@ const LocationPicker = (props: Props) => {
 			setIsLoading(true);
 			const location = await Location.getCurrentPositionAsync({});
 			setPickedLocation({
+				lat: location.coords.latitude,
+				lng: location.coords.longitude,
+			});
+			props.onLocationPicked({
 				lat: location.coords.latitude,
 				lng: location.coords.longitude,
 			});

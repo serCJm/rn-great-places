@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
 	ScrollView,
 	StyleSheet,
@@ -16,6 +16,7 @@ import { Colors } from "../assets/Colors";
 import ImagePickerComponent from "../components/ImagePicker";
 import LocationPicker from "../components/LocationPicker";
 import * as placesActions from "../store/places-actions";
+import { IPickedLocation } from "../components/LocationPicker";
 
 interface Props {
 	navigation: NavigationStackProp;
@@ -24,17 +25,26 @@ interface Props {
 const NewPlaceScreen: NavigationStackScreenComponent = (props: Props) => {
 	const [titleValue, setTitleValue] = useState("");
 	const [selectedImage, setSelectedImage] = useState("");
+	const [selectedLocation, setSelectedLocation] = useState<IPickedLocation>();
+
 	const dispatch = useDispatch();
 	const titleChangeHandler = (text: string) => {
 		setTitleValue(text);
 	};
 	const savePlaceHandler = () => {
-		dispatch(placesActions.addPlace(titleValue, selectedImage));
+		dispatch(
+			placesActions.addPlace(titleValue, selectedImage, selectedLocation)
+		);
 		props.navigation.goBack();
 	};
 	const imageTakenHandler = (imagePath: string) => {
 		setSelectedImage(imagePath);
 	};
+
+	const locationPickedHandler = useCallback((location: IPickedLocation) => {
+		setSelectedLocation(location);
+	}, []);
+
 	return (
 		<ScrollView>
 			<View style={styles.form}>
@@ -47,7 +57,10 @@ const NewPlaceScreen: NavigationStackScreenComponent = (props: Props) => {
 				<ImagePickerComponent
 					onImageTake={imageTakenHandler}
 				></ImagePickerComponent>
-				<LocationPicker navigation={props.navigation}></LocationPicker>
+				<LocationPicker
+					navigation={props.navigation}
+					onLocationPicked={locationPickedHandler}
+				></LocationPicker>
 				<Button
 					title="Save Place"
 					color={Colors.PRIMARY}

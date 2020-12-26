@@ -5,10 +5,12 @@ import { insertPlace, fetchPlaces } from "../helpers/db";
 import { ADD_PLACE, PlacesActionTypes, SET_PLACES } from "./types";
 import * as SQLite from "expo-sqlite";
 import Place from "../models/place";
+import { IPickedLocation } from "../components/LocationPicker";
 
 export const addPlace = (
 	title: string,
-	image: string
+	image: string,
+	location: IPickedLocation | undefined
 ): ThunkAction<void, RootState, unknown, PlacesActionTypes> => {
 	return async (dispatch) => {
 		const fileName = image.split("/").pop() || "";
