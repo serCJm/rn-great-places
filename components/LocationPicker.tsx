@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
 	Alert,
@@ -25,6 +25,15 @@ interface IPickedLocation {
 const LocationPicker = (props: Props) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [pickedLocation, setPickedLocation] = useState<IPickedLocation>();
+
+	const mapPickedLocation = props.navigation.getParam("pickedLocation");
+
+	useEffect(() => {
+		if (mapPickedLocation) {
+			setPickedLocation(mapPickedLocation);
+		}
+	}, [mapPickedLocation]);
+
 	const verifyPermissions = async () => {
 		const result = await Permissions.askAsync(Permissions.LOCATION);
 		if (result.status !== "granted") {
